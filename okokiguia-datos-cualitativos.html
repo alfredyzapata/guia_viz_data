@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De la Transcripción a la Visualización — Guía Didáctica</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1f8199;
+    --mint: #0cc1b1;
+    --orange: #fb830d;
+    --cream: #fffbf3;
+    --dark: #1a2332;
+    --mid: #2d3f55;
+    --light-teal: #e8f7fa;
+    --light-orange: #fff3e8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--mid) 50%, var(--teal) 100%);
+    color: white;
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(12,193,177,0.15);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(251,131,13,0.1);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(12,193,177,0.25);
+    border: 1px solid var(--mint);
+    color: var(--mint);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 span { color: var(--mint); }
+  .hero p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 620px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-author {
+    margin-top: 28px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-author strong { color: var(--orange); }
+
+  /* FLOW STEPS NAV */
+  .flow-nav {
+    display: flex;
+    gap: 0;
+    background: var(--dark);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .flow-nav::-webkit-scrollbar { display: none; }
+  .flow-btn {
+    flex: 0 0 auto;
+    padding: 14px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .flow-btn:hover { color: white; }
+  .flow-btn.active {
+    color: var(--mint);
+    border-bottom-color: var(--mint);
+  }
+  .flow-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    font-size: 0.7rem;
+    margin-right: 7px;
+  }
+  .flow-btn.active .flow-num {
+    background: var(--mint);
+    color: var(--dark);
+  }
+
+  /* MAIN CONTENT */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  .section {
+    display: none;
+    padding: 48px 0;
+    animation: fadeIn 0.3s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 900;
+    color: var(--dark);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .section-title span { color: var(--teal); }
+  .section-intro {
+    font-size: 0.95rem;
+    color: #5a6a7a;
+    max-width: 680px;
+    margin-bottom: 36px;
+    border-left: 3px solid var(--mint);
+    padding-left: 16px;
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid rgba(31,129,153,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--mint));
+  }
+  .card-icon { font-size: 1.8rem; margin-bottom: 12px; }
+  .card h3 { font-size: 0.9rem; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+  .card p { font-size: 0.82rem; color: #6a7a8a; line-height: 1.6; }
+
+  /* PROMPT BOX */
+  .prompt-block {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .prompt-block::before {
+    content: 'PROMPT';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--orange);
+    opacity: 0.7;
+  }
+  .prompt-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .prompt-label::before {
+    content: '▶';
+    font-size: 0.6rem;
+  }
+  .prompt-text {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: #e0eef5;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+  .prompt-text .ph {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .prompt-text .kw {
+    color: var(--mint);
+    font-weight: 500;
+  }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 16px;
+    background: rgba(12,193,177,0.15);
+    border: 1px solid var(--mint);
+    border-radius: 6px;
+    color: var(--mint);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .copy-btn:hover { background: rgba(12,193,177,0.3); }
+  .copy-btn.copied { color: #5de0a0; border-color: #5de0a0; background: rgba(93,224,160,0.1); }
+
+  /* STEPS */
+  .step-list { display: flex; flex-direction: column; gap: 20px; }
+  .step {
+    display: flex;
+    gap: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    border: 1px solid rgba(31,129,153,0.1);
+    align-items: flex-start;
+  }
+  .step-num {
+    flex: 0 0 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--teal), var(--mint));
+    color: white;
+    font-weight: 900;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-content h4 { font-size: 0.92rem; font-weight: 800; color: var(--dark); margin-bottom: 5px; }
+  .step-content p { font-size: 0.82rem; color: #6a7a8a; line-height: 1.6; }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(31,129,153,0.08);
+  }
+  .data-table th {
+    background: linear-gradient(90deg, var(--teal), var(--mid));
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  .data-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(31,129,153,0.08);
+    color: #3a4a5a;
+  }
+  .data-table tr:nth-child(even) td { background: rgba(31,129,153,0.03); }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: var(--light-teal);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+    font-size: 0.85rem;
+    color: var(--mid);
+  }
+  .highlight strong { color: var(--teal); }
+  .highlight.orange {
+    background: var(--light-orange);
+    border-left-color: var(--orange);
+  }
+  .highlight.orange strong { color: var(--orange); }
+
+  /* TAGS */
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: default;
+  }
+  .tag-high { background: rgba(251,131,13,0.15); color: var(--orange); border: 1px solid rgba(251,131,13,0.3); }
+  .tag-mid { background: rgba(31,129,153,0.12); color: var(--teal); border: 1px solid rgba(31,129,153,0.25); }
+  .tag-low { background: rgba(100,120,140,0.1); color: #7a8a9a; border: 1px solid rgba(100,120,140,0.2); }
+
+  /* PLATFORM CARDS */
+  .platform-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .platform-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(31,129,153,0.12);
+    text-align: center;
+  }
+  .platform-card .pname {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .platform-card .pdesc { font-size: 0.78rem; color: #7a8a9a; line-height: 1.5; }
+  .platform-card .pbest {
+    margin-top: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  .flourish .pname { color: #e91e8c; }
+  .flourish .pbest { background: rgba(233,30,140,0.1); color: #e91e8c; }
+  .datawrapper .pname { color: #1a6e99; }
+  .datawrapper .pbest { background: rgba(26,110,153,0.1); color: #1a6e99; }
+
+  /* TRIANGLE DIAGRAM */
+  .triangle-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0;
+  }
+  .triangle-diagram {
+    position: relative;
+    width: 300px;
+    height: 260px;
+  }
+  .tri-node {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .tri-top { top: 0; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--teal), var(--mint)); color: white; }
+  .tri-bl { bottom: 0; left: 0; background: linear-gradient(135deg, var(--orange), #ffa040); color: white; }
+  .tri-br { bottom: 0; right: 0; background: linear-gradient(135deg, var(--mid), var(--dark)); color: white; }
+  .tri-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -35%);
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--mint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--teal);
+    text-align: center;
+    line-height: 1.3;
+    z-index: 2;
+    box-shadow: 0 4px 20px rgba(12,193,177,0.25);
+  }
+
+  /* NAV BUTTONS */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(31,129,153,0.12);
+  }
+  .nav-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-prev {
+    background: rgba(31,129,153,0.08);
+    color: var(--teal);
+    border: 1px solid rgba(31,129,153,0.2);
+  }
+  .nav-prev:hover { background: rgba(31,129,153,0.15); }
+  .nav-next {
+    background: linear-gradient(135deg, var(--teal), var(--mint));
+    color: white;
+  }
+  .nav-next:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(12,193,177,0.3); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none !important; box-shadow: none !important; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 28px;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  .footer strong { color: var(--mint); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 36px; }
+    .container { padding: 0 16px; }
+    .platform-row { grid-template-columns: 1fr; }
+    .section { padding: 36px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Guía Didáctica · DATA VIZ Cualitativa</div>
+  <h1>De la <span>transcripción TXT</span><br>a la visualización de datos</h1>
+  <p>Una ruta paso a paso para que las y los estudiantes conviertan entrevistas educativas en visualizaciones con IA, Excel/CSV y plataformas como Flourish o Datawrapper.</p>
+  <div class="hero-author">Por <strong>Dr. Freddy Zapata</strong> · ISIDM · Jalisco, México</div>
+</div>
+
+<!-- FLOW NAV -->
+<div class="flow-nav">
+  <button class="flow-btn active" onclick="goTo(0)"><span class="flow-num">1</span>Panorama general</button>
+  <button class="flow-btn" onclick="goTo(1)"><span class="flow-num">2</span>El prompt clave (TXT → Excel)</button>
+  <button class="flow-btn" onclick="goTo(2)"><span class="flow-num">3</span>Palabras clave</button>
+  <button class="flow-btn" onclick="goTo(3)"><span class="flow-num">4</span>Categorías</button>
+  <button class="flow-btn" onclick="goTo(4)"><span class="flow-num">5</span>Triangulación</button>
+  <button class="flow-btn" onclick="goTo(5)"><span class="flow-num">6</span>Visualizar</button>
+</div>
+
+<!-- SECTIONS -->
+<div class="container">
+
+  <!-- SECCIÓN 1: PANORAMA -->
+  <div class="section active" id="s0">
+    <div class="section-tag">Paso 1 · Visión de conjunto</div>
+    <h2 class="section-title">El flujo completo de <span>análisis cualitativo</span></h2>
+    <p class="section-intro">Antes de tocar la IA, conviene ver el camino completo. Cada etapa tiene un insumo y produce un resultado concreto que alimenta la siguiente.</p>
+
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>📝 Tienes transcripciones (.txt)</h4>
+          <p>Entrevistas a docentes, estudiantes, padres y madres de familia, directivos u otros actores del ámbito educativo. Son texto plano, sin estructura.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>🤖 IA transforma el TXT en tabla estructurada (.csv / Excel)</h4>
+          <p>Con un prompt preciso en Gemini, Claude o ChatGPT conviertes el texto libre en columnas organizadas: participante, rol, fragmento, tema, emoción, frecuencia…</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>🔑 Extraes palabras clave y frecuencias</h4>
+          <p>Identificas los términos que aparecen más veces y los que tienen mayor peso semántico. Esto es la base para el análisis de frecuencia y las nubes de palabras.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>🗂️ Construyes categorías y subcategorías</h4>
+          <p>Agrupas los fragmentos temáticamente. Las categorías emergen del dato (enfoque inductivo) o las defines previamente desde el marco teórico (deductivo).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>🔺 Triangulas información entre actores</h4>
+          <p>Comparas qué dijo cada tipo de participante sobre el mismo tema. Las convergencias y divergencias son el corazón del análisis cualitativo riguroso.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h4>📊 Visualizas en Flourish o Datawrapper</h4>
+          <p>Subes el CSV a la plataforma y produces gráficas interactivas: barras de frecuencia, mapas de calor, redes semánticas, diagramas de convergencia/divergencia.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Regla de oro:</strong> La IA no interpreta por ti. Ella organiza y cuenta; tú eres quien construye el significado. Su valor está en que te ahorra horas de trabajo manual.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" disabled>← Anterior</button>
+      <button class="nav-btn nav-next" onclick="goTo(1)">Siguiente: El prompt clave →</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: EL PROMPT -->
+  <div class="section" id="s1">
+    <div class="section-tag">Paso 2 · El prompt fundamental</div>
+    <h2 class="section-title">De transcripción TXT<br>a <span>tabla estructurada</span></h2>
+    <p class="section-intro">Este es el momento clave. Un buen prompt le dice a la IA exactamente cómo reorganizar el texto libre en columnas útiles para el análisis y la visualización.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>¿Qué le pides a la IA?</h3>
+        <p>Que lea tu entrevista y la convierta en una tabla donde cada fila es un fragmento relevante con metadatos: quién habló, sobre qué, qué palabras usó, qué emoción transmitió.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📐</div>
+        <h3>¿Qué columnas necesitas?</h3>
+        <p>ID del participante, Rol (docente/estudiante/familia), Fragmento textual, Tema emergente, Palabras clave, Emoción/tono, y opcionalmente Frecuencia si se repite.</p>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt base — copia y adapta (Gemini / Claude / ChatGPT)</div>
+      <div class="prompt-text" id="prompt1">Actúa como <kw class="kw">analista de datos cualitativos</kw> especialista en investigación educativa.
+
+A continuación te compartiré la transcripción de una entrevista realizada a <ph class="ph">[docentes / estudiantes / madres y padres de familia]</ph> en el contexto de <ph class="ph">[tema de investigación, ej: convivencia escolar en secundaria]</ph>.
+
+Tu tarea es <kw class="kw">convertir esa transcripción en una tabla estructurada en formato CSV</kw> con las siguientes columnas exactas:
+
+<kw class="kw">ID_participante</kw> | <kw class="kw">Rol</kw> | <kw class="kw">Fragmento</kw> | <kw class="kw">Tema_emergente</kw> | <kw class="kw">Palabras_clave</kw> | <kw class="kw">Emocion_tono</kw> | <kw class="kw">Frecuencia_relativa</kw>
+
+Instrucciones:
+- Extrae únicamente fragmentos con contenido semántico relevante (omite saludos, muletillas, silencios)
+- En <kw class="kw">Tema_emergente</kw> escribe el tema en 2-4 palabras (ej: "clima áulico negativo")
+- En <kw class="kw">Palabras_clave</kw> lista máximo 5 palabras separadas por punto y coma
+- En <kw class="kw">Emocion_tono</kw> elige entre: positivo / negativo / ambivalente / neutro
+- En <kw class="kw">Frecuencia_relativa</kw> escribe: alta / media / baja según qué tan repetida es esa idea
+- Usa coma como separador CSV y UTF-8
+- El resultado debe ser <kw class="kw">solo el CSV</kw>, sin explicaciones adicionales
+
+<kw class="kw">Transcripción:</kw>
+<ph class="ph">[pega aquí tu transcripción completa]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt1', this)">📋 Copiar prompt</button>
+    </div>
+
+    <div class="highlight orange">
+      <strong>Tip:</strong> Si la entrevista es muy larga (+3,000 palabras), divídela en bloques. Pídele a la IA que mantenga la misma estructura de columnas en cada bloque; después pegas todos los resultados en un solo archivo Excel.
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:800; margin: 28px 0 12px; color: var(--dark);">¿Cómo se ve el resultado esperado?</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID_participante</th>
+          <th>Rol</th>
+          <th>Fragmento</th>
+          <th>Tema_emergente</th>
+          <th>Palabras_clave</th>
+          <th>Emocion_tono</th>
+          <th>Frecuencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>P01</td>
+          <td>Docente</td>
+          <td>"Los estudiantes no respetan las normas del salón…"</td>
+          <td>falta de respeto normas</td>
+          <td>respeto; normas; salón; disciplina; reglas</td>
+          <td>negativo</td>
+          <td>alta</td>
+        </tr>
+        <tr>
+          <td>P02</td>
+          <td>Estudiante</td>
+          <td>"A veces el maestro grita y ya no queremos participar…"</td>
+          <td>clima áulico tenso</td>
+          <td>gritar; participar; miedo; clase; maestro</td>
+          <td>negativo</td>
+          <td>media</td>
+        </tr>
+        <tr>
+          <td>P03</td>
+          <td>Madre de familia</td>
+          <td>"Mi hija ya no quiere ir a la escuela desde enero…"</td>
+          <td>resistencia escolar</td>
+          <td>escuela; rechazo; hija; asistencia; enero</td>
+          <td>negativo</td>
+          <td>media</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" onclick="goTo(0)">← Anterior</button>
+      <button class="nav-btn nav-next" onclick="goTo(2)">Siguiente: Palabras clave →</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: PALABRAS CLAVE -->
+  <div class="section" id="s2">
+    <div class="section-tag">Paso 3 · Frecuencia léxica</div>
+    <h2 class="section-title">Encontrar <span>palabras clave</span></h2>
+    <p class="section-intro">Las palabras clave son los términos que aparecen con mayor frecuencia y/o tienen mayor peso semántico en tu corpus. Identificarlas es el primer nivel de análisis.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Frecuencia cuantitativa</h3>
+        <p>¿Cuántas veces aparece cada palabra? Esto te lo puede contar la IA o Excel con tablas dinámicas. Útil para nubes de palabras y barras de frecuencia.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <h3>Peso semántico</h3>
+        <p>No toda palabra frecuente es significativa. "Y", "el", "que" no cuentan. La IA puede filtrar stopwords y quedarse con los términos con carga conceptual real.</p>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt: Extraer frecuencia de palabras clave desde CSV</div>
+      <div class="prompt-text" id="prompt2">Tengo un archivo CSV con columnas de análisis cualitativo de entrevistas educativas.
+La columna <kw class="kw">Palabras_clave</kw> contiene términos separados por punto y coma.
+
+Tu tarea:
+1. <kw class="kw">Cuenta la frecuencia total de cada término</kw> en toda esa columna
+2. <kw class="kw">Elimina stopwords en español</kw> (artículos, preposiciones, conjunciones)
+3. Ordena de mayor a menor frecuencia
+4. Devuelve el resultado en formato CSV con dos columnas:
+   <kw class="kw">Palabra</kw> | <kw class="kw">Frecuencia</kw>
+
+Incluye solo las <ph class="ph">[20 / 30 / 50]</ph> palabras más frecuentes.
+El resultado debe ser solo el CSV, sin texto adicional.
+
+<kw class="kw">Datos:</kw>
+<ph class="ph">[pega aquí el contenido de tu columna Palabras_clave]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt2', this)">📋 Copiar prompt</button>
+    </div>
+
+    <h3 style="font-size:0.95rem; font-weight:800; margin: 24px 0 14px; color: var(--dark);">Ejemplo de resultado — Nube de frecuencias</h3>
+    <p style="font-size:0.82rem; color:#7a8a9a; margin-bottom:12px;">Las etiquetas más grandes = mayor frecuencia. Así se verá en Flourish o Datawrapper.</p>
+
+    <div class="tag-cloud">
+      <span class="tag tag-high" style="font-size:1.4rem">violencia</span>
+      <span class="tag tag-high" style="font-size:1.2rem">respeto</span>
+      <span class="tag tag-high" style="font-size:1.15rem">normas</span>
+      <span class="tag tag-mid" style="font-size:1rem">docente</span>
+      <span class="tag tag-mid" style="font-size:0.95rem">participación</span>
+      <span class="tag tag-high" style="font-size:1.25rem">bullying</span>
+      <span class="tag tag-mid" style="font-size:0.9rem">familia</span>
+      <span class="tag tag-low" style="font-size:0.85rem">autoestima</span>
+      <span class="tag tag-mid" style="font-size:0.95rem">clima escolar</span>
+      <span class="tag tag-low" style="font-size:0.82rem">empatía</span>
+      <span class="tag tag-high" style="font-size:1.1rem">conflicto</span>
+      <span class="tag tag-low" style="font-size:0.8rem">inclusión</span>
+      <span class="tag tag-mid" style="font-size:0.9rem">disciplina</span>
+      <span class="tag tag-high" style="font-size:1.05rem">miedo</span>
+    </div>
+
+    <div class="highlight">
+      <strong>¿Qué busco aquí?</strong> Los términos de alta frecuencia son candidatos a convertirse en <strong>categorías de análisis</strong>. Si "violencia", "respeto" y "normas" aparecen 40+ veces, es muy probable que sean ejes temáticos centrales de tu investigación.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" onclick="goTo(1)">← Anterior</button>
+      <button class="nav-btn nav-next" onclick="goTo(3)">Siguiente: Categorías →</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4: CATEGORÍAS -->
+  <div class="section" id="s3">
+    <div class="section-tag">Paso 4 · Categorización</div>
+    <h2 class="section-title">Construir <span>categorías</span> de análisis</h2>
+    <p class="section-intro">Las categorías son las "cajas" conceptuales donde organizas los fragmentos del discurso. Pueden emerger del dato (inductivas) o venir de tu marco teórico (deductivas).</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🔼</div>
+        <h3>Inductiva (bottom-up)</h3>
+        <p>Partes de los datos. La IA te propone agrupaciones basadas en similitudes semánticas entre fragmentos. Tú validas o ajustas las categorías propuestas.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔽</div>
+        <h3>Deductiva (top-down)</h3>
+        <p>Partes de tu marco teórico. Le dices a la IA cuáles son tus categorías predefinidas y ella clasifica cada fragmento en la que corresponde.</p>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt: Categorización inductiva (la IA propone categorías)</div>
+      <div class="prompt-text" id="prompt3">Eres especialista en análisis cualitativo de datos educativos con enfoque constructivista.
+
+Tengo los siguientes fragmentos de entrevistas sobre <ph class="ph">[tema, ej: convivencia escolar en secundaria]</ph>. 
+
+Tu tarea:
+1. <kw class="kw">Identifica entre 4 y 7 categorías temáticas</kw> que emerjan de los propios fragmentos
+2. Para cada categoría proporciona: <kw class="kw">nombre de la categoría</kw>, <kw class="kw">descripción breve</kw> (1 oración) y los <kw class="kw">fragmentos asignados</kw> (usa su ID_participante)
+3. Justifica brevemente por qué esos fragmentos pertenecen a esa categoría
+4. Si algún fragmento es ambiguo, puede pertenecer a más de una categoría (marca con asterisco*)
+
+Responde en formato de tabla con columnas:
+<kw class="kw">Categoría</kw> | <kw class="kw">Descripción</kw> | <kw class="kw">IDs_fragmentos</kw> | <kw class="kw">Justificación</kw>
+
+<kw class="kw">Fragmentos:</kw>
+<ph class="ph">[pega aquí el contenido de tus columnas Fragmento + ID_participante]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt3', this)">📋 Copiar prompt</button>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt: Categorización deductiva (tú defines las categorías)</div>
+      <div class="prompt-text" id="prompt4">Eres analista de datos cualitativos. Tengo fragmentos de entrevistas educativas que debo clasificar en las siguientes <kw class="kw">categorías predefinidas</kw> de mi marco teórico:
+
+<ph class="ph">C1: Violencia física — C2: Violencia verbal — C3: Exclusión social — C4: Clima escolar — C5: Rol docente</ph>
+
+Para cada fragmento:
+- Asigna la categoría más adecuada (o dos si aplica)
+- Justifica en máximo 15 palabras
+- Si ninguna categoría aplica, escribe "Sin categoría" y propón una nueva
+
+Devuelve el resultado en CSV con columnas:
+<kw class="kw">ID_participante</kw> | <kw class="kw">Categoria_principal</kw> | <kw class="kw">Categoria_secundaria</kw> | <kw class="kw">Justificacion</kw>
+
+<kw class="kw">Fragmentos a clasificar:</kw>
+<ph class="ph">[pega aquí ID + Fragmento de cada fila]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt4', this)">📋 Copiar prompt</button>
+    </div>
+
+    <div class="highlight orange">
+      <strong>Regla metodológica:</strong> La IA hace una primera propuesta. Siempre debes releer los fragmentos asignados y ajustar manualmente. La validez del análisis la garantizas tú, no la máquina. Esto es lo que distingue la investigación rigurosa del uso superficial de la IA.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" onclick="goTo(2)">← Anterior</button>
+      <button class="nav-btn nav-next" onclick="goTo(4)">Siguiente: Triangulación →</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5: TRIANGULACIÓN -->
+  <div class="section" id="s4">
+    <div class="section-tag">Paso 5 · Rigor metodológico</div>
+    <h2 class="section-title">Triangular<br><span>información entre actores</span></h2>
+    <p class="section-intro">La triangulación es comparar la perspectiva de diferentes fuentes sobre el mismo fenómeno. Cuando docentes, estudiantes y familias coinciden, hay convergencia. Cuando difieren, hay divergencia — y eso es igualmente valioso.</p>
+
+    <div class="triangle-wrap">
+      <div class="triangle-diagram">
+        <div class="tri-node tri-top">👩‍🏫<br>Docentes</div>
+        <div class="tri-node tri-bl">👨‍👩‍👧<br>Familias</div>
+        <div class="tri-node tri-br">🧑‍🎓<br>Estudiantes</div>
+        <div class="tri-center">TEMA<br>central</div>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt: Triangulación por actor y categoría</div>
+      <div class="prompt-text" id="prompt5">Eres investigador/a cualitativo. Tengo fragmentos categorizados de tres tipos de actores educativos: <kw class="kw">docentes</kw>, <kw class="kw">estudiantes</kw> y <kw class="kw">madres y padres de familia</kw>.
+
+Para cada categoría temática, compara lo que dicen los tres actores y determina:
+1. <kw class="kw">Convergencias</kw>: ideas en las que los tres actores coinciden
+2. <kw class="kw">Divergencias</kw>: ideas en las que hay contradicción o perspectivas opuestas
+3. <kw class="kw">Vacíos</kw>: temas que solo menciona un actor y los demás no abordan
+
+Devuelve una tabla CSV con columnas:
+<kw class="kw">Categoria</kw> | <kw class="kw">Actor</kw> | <kw class="kw">Posicion_central</kw> | <kw class="kw">Tipo</kw> (convergencia/divergencia/vacío) | <kw class="kw">Notas</kw>
+
+<kw class="kw">Datos por actor:</kw>
+<ph class="ph">--- DOCENTES ---
+[fragmentos categorizados de docentes]
+
+--- ESTUDIANTES ---
+[fragmentos categorizados de estudiantes]
+
+--- FAMILIAS ---
+[fragmentos categorizados de familias]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt5', this)">📋 Copiar prompt</button>
+    </div>
+
+    <h3 style="font-size:0.95rem; font-weight:800; margin: 24px 0 12px; color: var(--dark);">Tabla de triangulación — Ejemplo</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th>Docentes</th>
+          <th>Estudiantes</th>
+          <th>Familias</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Clima de aula</strong></td>
+          <td>"El grupo está desorganizado"</td>
+          <td>"Nos sentimos incómodos"</td>
+          <td>"Mi hijo llega estresado"</td>
+          <td style="color:var(--teal); font-weight:700">✅ Convergencia</td>
+        </tr>
+        <tr>
+          <td><strong>Rol docente</strong></td>
+          <td>"Pongo límites claros"</td>
+          <td>"El maestro grita"</td>
+          <td>No mencionado</td>
+          <td style="color:var(--orange); font-weight:700">⚡ Divergencia</td>
+        </tr>
+        <tr>
+          <td><strong>Uso del celular</strong></td>
+          <td>"Es una distracción"</td>
+          <td>No mencionado</td>
+          <td>No mencionado</td>
+          <td style="color:#9a8a7a; font-weight:700">○ Vacío</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <strong>¿Por qué importa la divergencia?</strong> Cuando docentes dicen una cosa y estudiantes dicen otra, no significa que alguno mienta — significa que el fenómeno tiene múltiples dimensiones. Las divergencias son frecuentemente los hallazgos más ricos de la investigación.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" onclick="goTo(3)">← Anterior</button>
+      <button class="nav-btn nav-next" onclick="goTo(5)">Siguiente: Visualizar →</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6: VISUALIZAR -->
+  <div class="section" id="s5">
+    <div class="section-tag">Paso 6 · DATA VIZ</div>
+    <h2 class="section-title">Visualizar en<br><span>Flourish y Datawrapper</span></h2>
+    <p class="section-intro">Ya tienes los CSVs estructurados. Ahora los subes a la plataforma de visualización y produces gráficas interactivas que comunican tu análisis con impacto visual.</p>
+
+    <div class="platform-row">
+      <div class="platform-card flourish">
+        <div class="pname">Flourish</div>
+        <div class="pdesc">Ideal para visualizaciones dinámicas, narrativas de datos, nubes de palabras animadas y redes semánticas. Muy visual y fácil de publicar.</div>
+        <div class="pbest">Mejor para: narrativa + impacto visual</div>
+      </div>
+      <div class="platform-card datawrapper">
+        <div class="pname">Datawrapper</div>
+        <div class="pdesc">Excelente para tablas, barras de frecuencia, mapas de calor y gráficas comparativas entre actores. Más limpio y académico.</div>
+        <div class="pbest">Mejor para: rigor + publicación académica</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:0.95rem; font-weight:800; margin:28px 0 14px; color:var(--dark)">¿Qué CSV uso para cada visualización?</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Visualización</th>
+          <th>CSV que necesitas</th>
+          <th>Columnas clave</th>
+          <th>Plataforma sugerida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>☁️ Nube de palabras</td>
+          <td>Frecuencia léxica</td>
+          <td>Palabra · Frecuencia</td>
+          <td>Flourish</td>
+        </tr>
+        <tr>
+          <td>📊 Barras de frecuencia por categoría</td>
+          <td>Categorías + conteo</td>
+          <td>Categoria · N_fragmentos</td>
+          <td>Datawrapper</td>
+        </tr>
+        <tr>
+          <td>🔥 Mapa de calor por actor</td>
+          <td>Triangulación</td>
+          <td>Categoria · Actor · Tipo</td>
+          <td>Datawrapper</td>
+        </tr>
+        <tr>
+          <td>🔵 Red semántica</td>
+          <td>Co-ocurrencia de palabras</td>
+          <td>Origen · Destino · Peso</td>
+          <td>Flourish (Network)</td>
+        </tr>
+        <tr>
+          <td>📈 Timeline emocional</td>
+          <td>Fragmentos con tono</td>
+          <td>ID · Emocion_tono · Secuencia</td>
+          <td>Flourish (Line)</td>
+        </tr>
+        <tr>
+          <td>🌊 Diagrama Sankey</td>
+          <td>Flujos Actor→Keyword→Categoría</td>
+          <td>Source · Target · Value</td>
+          <td>Flourish (Sankey)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt extra: preparar CSV para red semántica (co-ocurrencias)</div>
+      <div class="prompt-text" id="prompt6">Necesito crear una <kw class="kw">red semántica</kw> de co-ocurrencias para visualizar en Flourish.
+
+A partir de la columna <kw class="kw">Palabras_clave</kw> de mi CSV, genera una nueva tabla que represente qué palabras aparecen juntas en el mismo fragmento.
+
+Formato de salida CSV con tres columnas:
+<kw class="kw">Origen</kw> | <kw class="kw">Destino</kw> | <kw class="kw">Peso</kw>
+
+Donde <kw class="kw">Peso</kw> es el número de veces que esas dos palabras co-aparecen en la misma fila.
+Incluye solo pares con peso >= <ph class="ph">[2 / 3]</ph> para reducir el ruido visual.
+Ordena por peso de mayor a menor.
+Devuelve solo el CSV.
+
+<kw class="kw">Datos:</kw>
+<ph class="ph">[pega aquí el contenido de tu columna Palabras_clave, una celda por línea]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt6', this)">📋 Copiar prompt</button>
+    </div>
+
+    <h3 style="font-size:0.95rem; font-weight:800; margin: 28px 0 4px; color: var(--dark);">🌊 Prompt Flourish — Diagrama Sankey</h3>
+    <p style="font-size:0.82rem; color:#7a8a9a; margin-bottom:16px;">El Sankey muestra cómo fluye el discurso: de <strong>Actor → Palabra clave → Categoría</strong>. El grosor de cada flujo representa la frecuencia. Es la visualización más completa para triangulación cualitativa.</p>
+
+    <div class="prompt-block">
+      <div class="prompt-label">Prompt 2 — De transcripción TXT a Sankey (Flourish)</div>
+      <div class="prompt-text" id="prompt7">Actúa como <kw class="kw">analista experto en datos cualitativos</kw> en investigación educativa y preparación de datos para visualización.
+
+Te proporcionaré una transcripción de entrevista en formato texto (.txt). Tu tarea es analizarla y transformarla en una estructura de datos compatible con <kw class="kw">diagramas tipo Sankey (Source–Target–Value)</kw>, lista para exportarse como CSV y subirse a Flourish.
+
+Sigue estos pasos de manera rigurosa:
+
+<kw class="kw">1. Análisis inicial</kw>
+- Analiza todo el contenido del texto.
+- Identifica ideas centrales, patrones y temas recurrentes.
+
+<kw class="kw">2. Segmentación</kw>
+- Divide el texto en unidades de significado (frases o párrafos cortos).
+
+<kw class="kw">3. Triangulación</kw>
+- Identifica palabras o frases recurrentes.
+- Usa estas recurrencias para detectar relaciones entre conceptos.
+- Estas relaciones serán la base de los flujos (links).
+
+<kw class="kw">4. Codificación</kw>
+- Asigna una palabra clave (keyword) a cada unidad (1–3 palabras).
+
+<kw class="kw">5. Categorización</kw>
+- Agrupa keywords en categorías emergentes.
+
+<kw class="kw">6. Identificación de actor</kw>
+- Detecta quién habla y asigna nomenclatura:
+  - Director = Dir
+  - Docente = Doc
+  - Estudiante = Est1, Est2…
+  - Familia = Fam1, Fam2…
+
+<kw class="kw">7. Construcción de relaciones (clave para Sankey)</kw>
+- Genera relaciones tipo:
+  · Actor → Keyword
+  · Keyword → Categoría
+- Cada relación representa un flujo.
+
+<kw class="kw">8. Cálculo de frecuencia</kw>
+- Cuenta cuántas veces se repite cada relación.
+- Esa frecuencia será el valor del flujo.
+
+<kw class="kw">9. Genera tabla final en formato CSV con columnas:</kw>
+<kw class="kw">Source</kw>,<kw class="kw">Target</kw>,<kw class="kw">Value</kw>
+
+<kw class="kw">10. Formato de salida</kw>
+- Entrega SOLO la tabla CSV.
+- Usa comas como separadores.
+- Incluye encabezados: Source,Target,Value
+- No agregues explicación.
+
+<kw class="kw">11. Rigor analítico</kw>
+- Evita duplicados innecesarios.
+- Unifica términos similares.
+- Mantén consistencia en categorías.
+
+<kw class="kw">Aquí está la transcripción:</kw>
+<ph class="ph">[pega aquí tu transcripción completa en texto plano]</ph></div>
+      <button class="copy-btn" onclick="copyPrompt('prompt7', this)">📋 Copiar prompt</button>
+    </div>
+
+    <h3 style="font-size:0.88rem; font-weight:800; margin: 20px 0 10px; color: var(--dark);">¿Cómo se ve el CSV resultante?</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Source</th><th>Target</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Doc</td><td>falta de respeto</td><td>5</td></tr>
+        <tr><td>Doc</td><td>clima tenso</td><td>3</td></tr>
+        <tr><td>Est1</td><td>miedo a participar</td><td>4</td></tr>
+        <tr><td>Fam1</td><td>resistencia escolar</td><td>2</td></tr>
+        <tr><td>falta de respeto</td><td>Violencia verbal</td><td>5</td></tr>
+        <tr><td>miedo a participar</td><td>Clima áulico</td><td>4</td></tr>
+        <tr><td>clima tenso</td><td>Clima áulico</td><td>3</td></tr>
+        <tr><td>resistencia escolar</td><td>Exclusión social</td><td>2</td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight" style="margin-top:0;">
+      <strong>Lectura del Sankey:</strong> El flujo va de izquierda a derecha — <em>quién habla → qué dice → en qué categoría cae</em>. Un flujo grueso entre "Est1" y "miedo a participar" significa que ese actor mencionó ese tema con alta frecuencia. Esto hace visible la triangulación de forma inmediata.
+    </div>
+
+    <div class="highlight">
+      <strong>Flujo final resumido:</strong> TXT → (prompt IA) → CSV base → (prompt IA) → CSV de frecuencias / categorías / triangulación / co-ocurrencias → (subir a Flourish o Datawrapper) → visualización interactiva lista para publicar o presentar.
+    </div>
+
+    <div class="highlight orange">
+      <strong>Último consejo:</strong> Guarda cada CSV con un nombre descriptivo: <code style="font-family:'Fira Code',monospace; font-size:0.8rem; background:rgba(0,0,0,0.06); padding:2px 6px; border-radius:4px">entrevistas_docentes_frecuencias.csv</code>, <code style="font-family:'Fira Code',monospace; font-size:0.8rem; background:rgba(0,0,0,0.06); padding:2px 6px; border-radius:4px">triangulacion_actores.csv</code>. Eso te permite regresar al dato original en cualquier momento y documentar tu proceso metodológico.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn nav-prev" onclick="goTo(4)">← Anterior</button>
+      <button class="nav-btn nav-next" disabled>✅ ¡Flujo completo!</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  Material didáctico por <strong>Dr. Freddy Zapata</strong> · ISIDM · Jalisco, México · DATA VIZ Cualitativa Aplicada a la Investigación Educativa
+</div>
+
+<script>
+  let current = 0;
+
+  function goTo(index) {
+    document.querySelectorAll('.section').forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.flow-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === index);
+    });
+    current = index;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyPrompt(id, btn) {
+    const el = document.getElementById(id);
+    const text = el.innerText || el.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ ¡Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 Copiar prompt';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
